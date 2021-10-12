@@ -1,3 +1,3 @@
 # admin_mypc
 
-sorter - a housekeeping script.
+sort_files - a housekeeping script.
