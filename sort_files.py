@@ -14,7 +14,7 @@ for subdir, dirs, files in os.walk(rootdir):
     if subdir != rootdir:
         break
     print("Currect directory: {}".format(subdir))
-    print("Directories:")
+    print("\nDirectories:")
     for dir in dirs:
         print("  " + dir)
         for mask, destination in handlers.items():
@@ -22,7 +22,7 @@ for subdir, dirs, files in os.walk(rootdir):
             if dir == mask:
                 #обробити dir
                 break
-    print("Files:")
+    print("\nFiles:")
     for file in files:
         #print("  " + os.path.join(subdir, file))
         for mask, destination in handlers.items():
