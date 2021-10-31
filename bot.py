@@ -7,17 +7,17 @@ def get_answer(msg, state):
         status = 1
     script = {}
     script[""] = "Welcome!"
-    script["hey"] = "hello"
+    script["quit"] = "Have a nice day!"
     answer = script[msg] if msg in script else "Don't know what to say."
     print(answer)
-    return status, answer
+    return status, answer, state
 
 state = {}
 m = ""
 while True:
-    s, a = get_answer(m, state)
+    s, _, state = get_answer(m, state)
     if s == 1:
         break
     m = input(">>")
-print("Bye")
+print("Exiting..")
 
