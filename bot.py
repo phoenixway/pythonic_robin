@@ -6,13 +6,10 @@ def get_answer(msg, state):
     if msg == "quit":
         status = 1
     script = {}
-    script[""] = lambda: print("Welcome, sir!")
-    script["hey"] = lambda: print("hello")
-    script["quit"] = lambda: print("Have a nice day!")
-    if msg in script:
-        script[msg]()
-    else:
-        print("Don't know what to say.")
+    script[""] = "Welcome!"
+    script["hey"] = "hello"
+    answer = script[msg] if msg in script else "Don't know what to say."
+    print(answer)
     return status, answer
 
 state = {}
