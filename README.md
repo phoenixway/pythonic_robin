@@ -1,8 +1,5 @@
-# admin_mypc
+# Pythonic Robin
 
-https://github.com/phoenixway/admin_mypc
+https://github.com/phoenixway/pythonic_robin
 
 (C) Roman Kozak. 
-
-## Files
-sort_files - a housekeeping script.
