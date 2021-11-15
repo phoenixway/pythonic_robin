@@ -1,3 +1,5 @@
+ #!/usr/bin/env python3
+
 import grammar_parser
 from datetime import datetime
 from pyleri.repeat import Repeat
