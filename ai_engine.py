@@ -8,13 +8,17 @@ rules = rules_engine.loadFromFile("script1.rules")
 
 rules.append({
     "type": "answer", 
-    "input": "helo", 
+    "input": "hello", 
     "output": "hey!"
 })
-rules.append({"type": "answer", "input": "what?", "output": "dont know"})
-rules.append({"type": "func", "input": "time", "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")})
+rules.append({
+    "type": "func", 
+    "input": "time", 
+    "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+})
 rules.append({"type": "answer", "input": "quit", "output": "Have a nice day!"})
 rules.append({"type": "answer", "input": "", "output": "Welcome!"})
+rules.append({"type": "answer", "input": "what?", "output": "dont know"})
 
 
 def get_answer(msg, state):
