@@ -7,37 +7,46 @@ class AI:
     
     def __init__(self) -> None:
         self.rules_engine = RulesEngine()
-        self.rules_engine.loadFromFile("script1.rules")
+        self._testingMode = False
 
-        self.rules_engine.rules.append({
-            "type": "answer", 
-            "input": "hello", 
-            "output": "hey!"
-        })
-        self.rules_engine.rules.append({
-            "type": "func", 
-            "input": "time", 
-            "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        })
+    def get_isTesting(self):
+        return self._testingMode
 
-        self.rules_engine.rules.append({
-            "trigger_type": "user_input", 
-            "response_type": "func", 
-            "input": "time2", 
-            "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        })
+    def set_isTesting(self, value):
+        self._testingMode = value
+        if value:
+            self.rules_engine.rules.append({
+                "type": "answer", 
+                "input": "hello", 
+                "output": "hey!"
+            })
+            self.rules_engine.rules.append({
+                "type": "func", 
+                "input": "time", 
+                "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            })
 
-        self.rules_engine.rules.append({
-            "trigger_type": "mark and user_input", 
-            "response_type": "ai_answer", 
-            "mark": "testmark",
-            "input": "whatsup", 
-            "output": "generating answers for u"
-        })
+            self.rules_engine.rules.append({
+                "trigger_type": "user_input", 
+                "response_type": "func", 
+                "input": "time2", 
+                "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            })
 
-        self.rules_engine.rules.append({"type": "answer", "input": "quit", "output": "Have a nice day!"})
-        self.rules_engine.rules.append({"type": "answer", "input": "", "output": "Welcome!"})
-        self.rules_engine.rules.append({"type": "answer", "input": "what?", "output": "dont know"})
+            self.rules_engine.rules.append({
+                "trigger_type": "mark and user_input", 
+                "response_type": "ai_answer", 
+                "mark": "testmark",
+                "input": "whatsup", 
+                "output": "generating answers for u"
+            })
+
+            self.rules_engine.rules.append({"type": "answer", "input": "quit", "output": "Have a nice day!"})
+            self.rules_engine.rules.append({"type": "answer", "input": "", "output": "Welcome!"})
+            self.rules_engine.rules.append({"type": "answer", "input": "what?", "output": "dont know"})
+        
+    isTesting = property(get_isTesting, set_isTesting)
+
     def get_answer(self, msg, state):
         answer = "Don't know what to say."
         status = 1 if msg == "quit" else 0 

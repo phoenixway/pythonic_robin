@@ -4,6 +4,9 @@ import ai_engine
 state = {}
 user_message = ""
 ai = ai_engine.AI()
+ai.isTesting = True
+ai.rules_engine.loadFromFile("script1.rules")
+
 while True:
     status, answer, state = ai.get_answer(user_message, state)
     if answer != "":
