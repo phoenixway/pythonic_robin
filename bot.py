@@ -2,13 +2,13 @@
 import ai_engine
 
 state = {}
-m = ""
+user_message = ""
 while True:
-    s, a, state = ai_engine.get_answer(m, state)
-    if a != "":
-        print(a)  
-    if s == 1:
+    status, answer, state = ai_engine.get_answer(user_message, state)
+    if answer != "":
+        print(answer)  
+    if status == 1:
         break
-    m = input(">>")
+    user_message = input(">>")
 print("Exiting..")
 
