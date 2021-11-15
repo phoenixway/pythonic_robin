@@ -1,11 +1,11 @@
  #!/usr/bin/env python3
 
-import grammar_parser
+import rs_parser
 from pyleri.repeat import Repeat
 
 class RulesEngine():
     def __init__(self) -> None:
-        self.grammar = grammar_parser.MyGrammar()
+        self.grammar = rs_parser.MyGrammar()
     
     def loadFromFile(self, name):
         f = open(name, "r")
@@ -15,6 +15,6 @@ class RulesEngine():
         self.rules = []
         if ( type(start.element) is Repeat) and (start.element.name == 'START'):
             for item in start.children:
-                rule = grammar_parser.get_ast(item)
+                rule = rs_parser.get_ast(item)
                 if rule != None: self.rules.append(rule)
         return self.rules

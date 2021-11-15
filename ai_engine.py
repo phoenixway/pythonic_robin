@@ -1,6 +1,6 @@
  #!/usr/bin/env python3
 
-from rules import RulesEngine
+from rules_runner import RulesEngine
 from datetime import datetime
 
 rules_engine = RulesEngine()
