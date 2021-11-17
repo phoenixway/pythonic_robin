@@ -12,10 +12,10 @@ from pyleri import (
 from pyleri.repeat import Repeat
 
 class MyGrammar(Grammar):
-    RE_KEYWORDS = re.compile('^[A-Za-z-=>]+')
+    RE_KEYWORDS = re.compile('^[A-Za-z =>]+')
     r_output = Regex('[a-zA-Z 0-9\']+')
     r_input = Regex('[a-zA-Z 0-9\']+')
-    k_lead2 = Token('=>')
+    k_lead2 = Token('>>')
     START = Repeat(Sequence(r_input, k_lead2, r_output))
 
 def node_props(node, children):

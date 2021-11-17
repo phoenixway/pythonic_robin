@@ -17,4 +17,5 @@ class RulesEngine():
             for item in start.children:
                 rule = rs_parser.get_ast(item)
                 if rule != None: self.rules.append(rule)
+        pass
 

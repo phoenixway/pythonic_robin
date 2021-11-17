@@ -5,6 +5,40 @@ from datetime import datetime
 
 class AI:
     
+    testRules = [
+        {
+            "trigger_type": "user_input", 
+            "response_type": "func", 
+            "input": "functest", 
+            "func": lambda: str(1+1)
+        }, 
+        {
+            "trigger_type": "user_input", 
+            "response_type": "output", 
+            "input": "test_testMode", 
+            "output": "ok!"
+        },
+        {
+            "trigger_type": "user_input", 
+            "response_type": "output", 
+            "input": "quit", 
+            "output": "Have a nice day!"
+        },    
+        {
+            "trigger_type": "user_input", 
+            "response_type": "output", 
+            "input": "", 
+            "output": "Welcome!"
+        },
+        {
+            "trigger_type": "mark and user_input", 
+            "response_type": "ai_answer", 
+            "mark": "testmark",
+            "input": "whatsup", 
+            "output": "generating answers for u"
+        }
+        ]
+
     def __init__(self) -> None:
         self.rulesEngine = RulesEngine()
         self._testingMode = False
@@ -15,36 +49,10 @@ class AI:
     def set_isTesting(self, value):
         self._testingMode = value
         if value:
-            self.rulesEngine.rules.append({
-                "type": "answer", 
-                "input": "hello", 
-                "output": "hey!"
-            })
-            self.rulesEngine.rules.append({
-                "type": "func", 
-                "input": "time", 
-                "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            })
+            self.rulesEngine.rules = [*self.rulesEngine.rules, *AI.testRules]
+        else:
+            self.rulesEngine.rules = {item for item in self.rulesEngine.rules if item not in AI.testRules}
 
-            self.rulesEngine.rules.append({
-                "trigger_type": "user_input", 
-                "response_type": "func", 
-                "input": "time2", 
-                "func": lambda: datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            })
-
-            self.rulesEngine.rules.append({
-                "trigger_type": "mark and user_input", 
-                "response_type": "ai_answer", 
-                "mark": "testmark",
-                "input": "whatsup", 
-                "output": "generating answers for u"
-            })
-
-            self.rulesEngine.rules.append({"type": "answer", "input": "quit", "output": "Have a nice day!"})
-            self.rulesEngine.rules.append({"type": "answer", "input": "", "output": "Welcome!"})
-            self.rulesEngine.rules.append({"type": "answer", "input": "what?", "output": "dont know"})
-        
     isTesting = property(get_isTesting, set_isTesting)
 
     def query(self, msg, state):
@@ -58,8 +66,14 @@ class AI:
             elif "type" in rule and rule["type"] == "func" and rule["input"] == msg:
                 answer = rule["func"]()
                 break
-            elif "trigger type" in rule and rule["trigger_type"] == "mark and user_input" and rule["input"] == msg and state["mark"] == rule["mark"]:
+            elif rule.get("trigger_type", None) == "mark and user_input" and rule["input"] == msg and state["mark"] == rule["mark"]:
                 answer = rule["output"]
+                break
+            elif rule.get("trigger_type", None) == "user_input" and rule["input"] == msg:
+                if rule.get("response_type", None) == "output":
+                    answer = rule["output"]
+                elif rule.get("response_type", None) == "func":
+                    answer = rule["func"]()
                 break
 
         return status, answer, state
