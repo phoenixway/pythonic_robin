@@ -1,6 +1,8 @@
  #!/usr/bin/env python3
 
 import re
+from pyparsing import *
+import pyparsing as pp
 
 from pyleri import (
     Grammar,
@@ -11,12 +13,25 @@ from pyleri import (
     Sequence)
 from pyleri.repeat import Repeat
 
-class MyGrammar(Grammar):
+class RobinScriptGrammar(Grammar):
     RE_KEYWORDS = re.compile('^[A-Za-z =>]+')
     r_output = Regex('[a-zA-Z 0-9\']+')
     r_input = Regex('[a-zA-Z 0-9\']+')
     k_lead2 = Token('>>')
     START = Repeat(Sequence(r_input, k_lead2, r_output))
+
+    statement = Forward()
+    #suite = indentedBlock(statement)
+
+    text = alphanums + ".,!? "
+    input = Word(text)('input')
+    output = Word(text)('output')
+    input2output = (input + Suppress("=>") + output) ("in2out")
+    comment = ("#" + Word(text))("comment")
+    statement << Group(input2output | comment)('statement')
+    statement.setResultsName("statement")
+    module_body = OneOrMore(statement)
+
 
 def node_props(node, children):
     return {
@@ -39,5 +54,21 @@ def get_ast(node):
         }
     else:
         return None
+
+def getRules(pyparserResults):
+    rules = []
+    for item in pyparserResults:
+            #print("Is {} a in2out? {}".format(item, 'in2out' in item))
+            if 'in2out' in item:
+                #print("Content is: {}".format(item['in2out']))
+                #print("Input: {}, output: {}".format(item['in2out'][0], item['in2out'][1]))
+                input = item['in2out'][0]
+                output = item['in2out'][1]
+                rules.append({
+                    'type': 'answer',
+                    'input': input.rstrip(' '),
+                    'output': output
+                })
+    return rules
 
         
