@@ -5,16 +5,28 @@ from pyparsing import *
 import pyparsing as pp
 
 class RobinScriptGrammar():
+    ParserElement.setDefaultWhitespaceChars(" \t")
+
     statement = Forward()
     suite = pp.IndentedBlock(statement)
-    text = alphanums + ".,!?()\'\" "
+    all_except_spaces = Word(printables)
+    text = Word(printables)
+    #literas_spaces = OneOrMore(all_except_spaces | White(' ',max=1))
+    #text = pp.Combine(literas_spaces) + ~White()
+    #text = alphanums + ".,;!?()\'\" " + ~White()
+    
+    NL = Suppress(LineEnd())
+
     input = Word(text)('input')
     output = Word(text)('output')
-    code = (Suppress('{') + Word(text) + Suppress('}'))('code')
-    input2output = (input + Suppress("=>") + output) ("in2out")
-    input2code = (input + Suppress("=>") + code ) ("in2code")
-    comment = ("#" + Word(text))("comment")
-    statement << Group(input2output | comment | input2code)('statement')
+    in2out = (input + Suppress("=>") + output + NL) ("in2out")
+    comment = (Suppress("#") + Word(text) + NL)("comment")
+
+    code = (Optional(NL) + Suppress('{') + Optional(NL) + Word(text) + Optional(NL) + Suppress('}'))('code')
+    in2code = (input + Suppress("=>") + code + NL) ("in2code")
+
+
+    statement << Optional(NL) + Group(in2out | comment | in2code)('statement')
     statement.setResultsName("statement")
     module_body = OneOrMore(statement)
 
