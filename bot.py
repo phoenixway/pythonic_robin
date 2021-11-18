@@ -16,8 +16,11 @@ def save(prev_h_len, histfile):
     new_h_len = readline.get_current_history_length()
     readline.set_history_length(1000)
     readline.append_history_file(new_h_len - prev_h_len, histfile)
-    
+
 atexit.register(save, h_len, histfile)
+
+current_dir = os.path.dirname(os.path.abspath(__file__))   # Can also use os.getcwd()
+os.chdir(current_dir)
 
 state = {}
 state['status'] = 'default'

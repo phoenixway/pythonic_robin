@@ -12,15 +12,15 @@ class RulesEngine():
         statement = Forward()
         suite = pp.IndentedBlock(statement)
         NL = Suppress(LineEnd())
-        nonspaces=alphanums + ".,:;%!?+-()\'\""
+        nonspaces=alphanums + "._,:=;%!?+-()\'\""
         text = Combine(delimitedList(Word(nonspaces), delim=r' '), joinString=' ')
         input = text('input')
         output = text('output')
-        in2out = (input + Suppress(Optional(Word(" "))) + Suppress("=>") + output + NL) ("in2out")
+        in2out = (input + Suppress(Optional(Word(" "))) + Suppress(">>>") + output + NL) ("in2out")
         comment = (Suppress("#") + Word(nonspaces + " ") + NL)("comment")
 
         code = OneOrMore(Optional(NL) + Word(nonspaces + " ") + Optional(NL))('code')
-        in2code = (input + Suppress("=>") + Optional(NL) + Suppress('{') + code + Optional(NL) + Suppress('}') + NL) ("in2code")
+        in2code = (input + Suppress(">>>") + Optional(NL) + Suppress('{') + code + Optional(NL) + Suppress('}') + NL) ("in2code")
 
         statement << Optional(NL) + Group(in2out | comment | in2code)('statement')
         statement.setResultsName("statement")

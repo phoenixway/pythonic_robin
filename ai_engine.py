@@ -4,6 +4,7 @@ from rs_engine import RulesEngine
 from rules import *
 from padatious import IntentContainer
 
+
 class AI:
     
     def quitStatus(state):

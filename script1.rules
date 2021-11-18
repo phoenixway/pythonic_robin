@@ -1,16 +1,19 @@
 
-do i have to => yes
-testScript => answer
+do i have to >>> yes
+testScript >>> answer
 #comment it
-cheer me => Congratulations, greatest developper in the world ever!
-thank u => You welcome, master.
-cursing => Oh, master..
-hello => hey!
-time => {
+cheer me >>> Congratulations, greatest developper in the world ever!
+thank u >>> You welcome, master.
+cursing >>> Oh, master..
+hello >>> hey!
+time >>> {
     exec('from datetime import datetime')
     datetime.now().strftime('%H:%M:%S')
 }
-change wallpaper => {
+change wallpaper >>> {
     exec('import os')
     os.popen('variety -n').read()
+}
+weather >>> {
+    get_weather()
 }
