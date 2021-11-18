@@ -5,14 +5,14 @@ import rules_engine
 
 class TestGrammar(unittest.TestCase):
     def setUp(self) -> None:
-        self.grammar = rules_engine.RobinScriptParser()
+        self.rules_engine = rules_engine.RulesEngine()
         return super().setUp()
 
     def test_in2out(self):
         test_data = '''
         bla=>bla2
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[0]
         self.assertTrue('in2out' in item)
         self.assertEqual(item['in2out'][0], "bla")
@@ -22,7 +22,7 @@ class TestGrammar(unittest.TestCase):
         test_data = '''
         bla => bla2
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[0]
         self.assertTrue('in2out' in item)
         self.assertEqual(item['in2out'][0], "bla")
@@ -32,7 +32,7 @@ class TestGrammar(unittest.TestCase):
         test_data = '''
         bla3 bla4 => bla2 blat5 7
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[0]
         self.assertTrue('in2out' in item)
         self.assertEqual(item['in2out'][0], "bla3 bla4")
@@ -44,7 +44,7 @@ class TestGrammar(unittest.TestCase):
         bla3 text => bla4 text 2
         #comment it
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         self.assertEqual(len(parseTree), 3)
         item = parseTree[0]
         self.assertTrue('in2out' in item)
@@ -67,7 +67,7 @@ class TestGrammar(unittest.TestCase):
             code5('test')
         }
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")
@@ -84,7 +84,7 @@ class TestGrammar(unittest.TestCase):
             code5('test')
         }
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")
@@ -98,7 +98,7 @@ class TestGrammar(unittest.TestCase):
         func => {code5('test')
         }
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")
@@ -111,7 +111,7 @@ class TestGrammar(unittest.TestCase):
         #comment it
         func => { code5('test') }
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         #FIXME
@@ -127,7 +127,7 @@ class TestGrammar(unittest.TestCase):
             code5('test')
         }
         '''
-        parseTree = self.grammar.body.parseString(test_data)
+        parseTree = self.rules_engine.parser.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")

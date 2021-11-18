@@ -6,5 +6,5 @@ cheer me => Congratulations, greatest developper in the world ever!
 thank u => You welcome, master.
 hello => hey!
 time => {
-    print
+    str(1+1)
 }
