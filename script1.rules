@@ -10,3 +10,7 @@ time => {
     exec('from datetime import datetime')
     datetime.now().strftime('%H:%M:%S')
 }
+change wallpaper => {
+    exec('import os')
+    os.popen('variety -n').read()
+}
