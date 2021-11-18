@@ -1,22 +1,42 @@
  #!/usr/bin/env python3
 
 import unittest
-import rs_parser
+import rules_engine
 
 class TestGrammar(unittest.TestCase):
     def setUp(self) -> None:
-        self.grammar = rs_parser.RobinScriptGrammar()
+        self.grammar = rules_engine.RobinScriptParser()
         return super().setUp()
 
     def test_in2out(self):
         test_data = '''
         bla=>bla2
         '''
-        parseTree = self.grammar.module_body.parseString(test_data)
+        parseTree = self.grammar.body.parseString(test_data)
         item = parseTree[0]
         self.assertTrue('in2out' in item)
         self.assertEqual(item['in2out'][0], "bla")
         self.assertEqual(item['in2out'][1], "bla2")
+
+    def test_in2out1(self):
+        test_data = '''
+        bla => bla2
+        '''
+        parseTree = self.grammar.body.parseString(test_data)
+        item = parseTree[0]
+        self.assertTrue('in2out' in item)
+        self.assertEqual(item['in2out'][0], "bla")
+        self.assertEqual(item['in2out'][1], "bla2")
+
+    def test_in2out2(self):
+        test_data = '''
+        bla3 bla4 => bla2 blat5 7
+        '''
+        parseTree = self.grammar.body.parseString(test_data)
+        item = parseTree[0]
+        self.assertTrue('in2out' in item)
+        self.assertEqual(item['in2out'][0], "bla3 bla4")
+        self.assertEqual(item['in2out'][1], "bla2 blat5 7")
 
     def test_multyline(self):
         test_data = '''
@@ -24,14 +44,15 @@ class TestGrammar(unittest.TestCase):
         bla3 text => bla4 text 2
         #comment it
         '''
-        parseTree = self.grammar.module_body.parseString(test_data)
+        parseTree = self.grammar.body.parseString(test_data)
+        self.assertEqual(len(parseTree), 3)
         item = parseTree[0]
         self.assertTrue('in2out' in item)
         self.assertEqual(item['in2out'][0], "bla")
         self.assertEqual(item['in2out'][1], "bla2")
         item = parseTree[1]
         self.assertTrue('in2out' in item)
-        self.assertEqual(item['in2out'][0], "bla3 text ")
+        self.assertEqual(item['in2out'][0], "bla3 text")
         self.assertEqual(item['in2out'][1], "bla4 text 2")
         item = parseTree[2]
         self.assertTrue('comment' in item)
@@ -46,12 +67,12 @@ class TestGrammar(unittest.TestCase):
             code5('test')
         }
         '''
-        parseTree = self.grammar.module_body.parseString(test_data)
+        parseTree = self.grammar.body.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")
         #FIXME
-        self.assertEqual(item['in2code'][0], "func ")
+        self.assertEqual(item['in2code'][0], "func")
 
     def test_code2(self):
         test_data = '''
@@ -63,11 +84,11 @@ class TestGrammar(unittest.TestCase):
             code5('test')
         }
         '''
-        parseTree = self.grammar.module_body.parseString(test_data)
+        parseTree = self.grammar.body.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")
-        self.assertEqual(item['in2code'][0], "func ")
+        self.assertEqual(item['in2code'][0], "func")
 
     def test_code3(self):
         test_data = '''
@@ -77,11 +98,11 @@ class TestGrammar(unittest.TestCase):
         func => {code5('test')
         }
         '''
-        parseTree = self.grammar.module_body.parseString(test_data)
+        parseTree = self.grammar.body.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")
-        self.assertEqual(item['in2code'][0], "func ")
+        self.assertEqual(item['in2code'][0], "func")
 
     def test_code4(self):
         test_data = '''
@@ -90,12 +111,12 @@ class TestGrammar(unittest.TestCase):
         #comment it
         func => { code5('test') }
         '''
-        parseTree = self.grammar.module_body.parseString(test_data)
+        parseTree = self.grammar.body.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         #FIXME
         self.assertEqual(item['code'][0], "code5('test') ")
-        self.assertEqual(item['in2code'][0], "func ")
+        self.assertEqual(item['in2code'][0], "func")
 
     def test_code5(self):
         test_data = '''
@@ -106,8 +127,8 @@ class TestGrammar(unittest.TestCase):
             code5('test')
         }
         '''
-        parseTree = self.grammar.module_body.parseString(test_data)
+        parseTree = self.grammar.body.parseString(test_data)
         item = parseTree[3]
         self.assertTrue('in2code' in item)
         self.assertEqual(item['code'][0], "code5('test')")
-        self.assertEqual(item['in2code'][0], "func ")
+        self.assertEqual(item['in2code'][0], "func")

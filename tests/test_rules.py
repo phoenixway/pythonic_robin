@@ -3,7 +3,7 @@
 import unittest
 import ai_engine
 
-class TestRulesEngine(unittest.TestCase):
+class TestRules(unittest.TestCase):
     def setUp(self) -> None:
         self.ai = ai_engine.AI()
         self.ai.rulesEngine.loadFromFile("script1.rules")
