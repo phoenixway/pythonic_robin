@@ -1,28 +1,39 @@
  #!/usr/bin/env python3
 
 from rules_engine import RulesEngine
-from rules import In2Code_Rule, In2Out_Rule
+from rules import *
+from padatious import IntentContainer
 
 class AI:
     
+    def quitStatus(state):
+        state['status']='quit'
+        return state
+
     testRules = [
         
         In2Code_Rule("functest", "str(1+1)"),
         In2Out_Rule("test_testMode", "ok!"),
-        In2Out_Rule("quit", "Have a nice day!"),
-        In2Out_Rule("", "Welcome!"),
-        {
-            "trigger_type": "mark and user_input", 
-            "response_type": "ai_answer", 
-            "mark": "testmark",
-            "input": "whatsup", 
-            "output": "generating answers for u"
-        }
+        In2OutAndState_Rule("goodbye", "Have a nice day!", state_change=quitStatus ),
+        In2Out_Rule("", "Welcome!")
+        # ,
+        # {
+        #     "trigger_type": "mark and user_input", 
+        #     "response_type": "ai_answer", 
+        #     "mark": "testmark",
+        #     "input": "whatsup", 
+        #     "output": "generating answers for u"
+        # }
         ]
 
     def __init__(self) -> None:
         self.rulesEngine = RulesEngine()
         self._testingMode = False
+        self.container = IntentContainer('intent_cache')
+        self.container.load_file('hello', 'intents/hello.intent')
+        self.container.load_file('goodbye', 'intents/goodbye.intent')
+        self.container.load_file('cursing', 'intents/cursing.intent')
+        self.container.train()
 
     def get_isTesting(self):
         return self._testingMode
@@ -36,15 +47,25 @@ class AI:
 
     isTesting = property(get_isTesting, set_isTesting)
 
-    def query(self, msg, state):
-        answer = "Don't know what to say."
-        status = 1 if msg == "quit" else 0 
-
+    def findRule(self, msg, state={}):
+        r = None
         for rule in self.rulesEngine.rules:
             if rule.isTrue(msg):
                 if isinstance(rule, In2Out_Rule) or isinstance(rule, In2Code_Rule):
-                    answer = rule.activate()
+                    r = rule
                     break
+        if r is None:
+            data = self.container.calc_intent(msg)
+            r = self.findRule(data.name)
+        return r
+
+    def query(self, msg, state):
+        answer = "Don't know what to say." 
+
+        rule = self.findRule(msg)
+        if rule != None:
+            rule.updateState(state)
+            answer, state = rule.activate()
             # elif rule.get("trigger_type", None) == "user_input" and rule["input"] == msg:
             #     if rule.get("response_type", None) == "output":
             #         answer = rule["output"]
@@ -52,4 +73,4 @@ class AI:
             #         answer = rule["func"]()
             #     break
 
-        return status, answer, state
+        return answer, state
