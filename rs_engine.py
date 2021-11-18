@@ -12,7 +12,7 @@ class RulesEngine():
         statement = Forward()
         suite = pp.IndentedBlock(statement)
         NL = Suppress(LineEnd())
-        nonspaces=alphanums + ".,;!?+-()\'\""
+        nonspaces=alphanums + ".,:;%!?+-()\'\""
         text = Combine(delimitedList(Word(nonspaces), delim=r' '), joinString=' ')
         input = text('input')
         output = text('output')

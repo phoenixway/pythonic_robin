@@ -56,7 +56,7 @@ class AI:
                     break
         if r is None:
             data = self.container.calc_intent(msg)
-            r = self.findRule(data.name)
+            r = self.findRule(data.name) if data.conf > 0.7 else None
         return r
 
     def query(self, msg, state):
