@@ -5,7 +5,7 @@ testScript >>> answer
 cheer me >>> Congratulations, greatest developper in the world ever!
 thank u >>> You welcome, master.
 cursing >>> Oh, master..
-hello >>> hey!
+hello1 >>> hey!
 time >>> {
     exec('from datetime import datetime')
     datetime.now().strftime('%H:%M:%S')
@@ -14,6 +14,24 @@ change wallpaper >>> {
     exec('import os')
     os.popen('variety -n').read()
 }
+
+#exec('import os')
+#os.popen('xdg-open "https://www.pinterest.com/wheniwork/motivation-for-today/"').read()
+inspire >>> {
+    exec('from tools.quotes import getQuote')
+    getQuote()
+}
+
 weather >>> {
     get_weather()
 }
+js_func >>> jscode 
+    var x = {company: 'Sqreen'}; 
+    x.company
+end_jscode
+
+hello >>> jscode
+    greatings = ['hey you!', 'hello, great warrior!', 'sholom, eternal champion!', 'good time of day, master', 'great to see you, mylord'] ;
+    i = Math.floor(Math.random() * 5) ;
+    greatings[i]
+end_jscode

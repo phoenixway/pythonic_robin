@@ -3,7 +3,7 @@
 from rs_engine import RulesEngine
 from rules import *
 from padatious import IntentContainer
-
+from tools.quotes import getQuote
 
 class AI:
     
@@ -16,7 +16,7 @@ class AI:
         In2Code_Rule("functest", "str(1+1)"),
         In2Out_Rule("test_testMode", "ok!"),
         In2OutAndState_Rule("goodbye", "Have a nice day!", state_change=quitStatus ),
-        In2Out_Rule("", "Welcome!")
+        In2Out_Rule("", "Welcome!\n" + getQuote())
         # ,
         # {
         #     "trigger_type": "mark and user_input", 
@@ -36,6 +36,7 @@ class AI:
         self.container.load_file('cursing', 'intents/cursing.intent')
         self.container.load_file('time', 'intents/time.intent')
         self.container.load_file('thank u', 'intents/thanks.intent')
+        self.container.load_file('inspire', 'intents/inspire.intent')
         self.container.train()
 
     def get_isTesting(self):
@@ -54,12 +55,12 @@ class AI:
         r = None
         for rule in self.rulesEngine.rules:
             if rule.isTrue(msg):
-                if isinstance(rule, In2Out_Rule) or isinstance(rule, In2Code_Rule):
+                if isinstance(rule, In2Out_Rule) or isinstance(rule, In2Code_Rule) or isinstance(rule, In2JSCode_Rule):
                     r = rule
                     break
         if r is None:
             data = self.container.calc_intent(msg)
-            r = self.findRule(data.name) if data.conf > 0.6 else None
+            r = self.findRule(data.name) if data.conf > 0.5 else None
         return r
 
     def query(self, msg, state):

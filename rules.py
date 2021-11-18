@@ -1,5 +1,6 @@
  #!/usr/bin/env python
-
+ 
+from py_mini_racer import py_mini_racer
 import python_weather
 import asyncio
 
@@ -61,6 +62,25 @@ class In2Code_Rule():
                 result = eval(c)
         else:
             result = eval(self.code)
+        return result, self.state
+    def isTrue(self, message):
+        if message == self.input:
+            return True
+
+class In2JSCode_Rule():
+    def __init__(self, input, code, state={}) -> None:
+        self.input = input
+        self.code = code
+    def updateState(self, state):
+        self.state = state
+    def activate(self):
+        result = None
+        ctx = py_mini_racer.MiniRacer()
+        if isinstance(self.code, list):
+            for c in self.code:
+                result = ctx.eval(c)
+        else:
+            result = ctx.eval(self.code)
         return result, self.state
     def isTrue(self, message):
         if message == self.input:
