@@ -11,8 +11,9 @@ class TestRulesEngine(unittest.TestCase):
         return super().setUp()
 
     def test_1(self):
-        status, answer, state = self.ai.query("testScript", {})
-        self.assertIsNot(status, 1)
+        answer, state  = self.ai.query("testScript", {})
+        if 'status' in state:
+            self.assertIsNot(state["status"], "quit")
         self.assertTrue(answer == "answer")
         # status, answer, state = self.ai.query("test_testMode", {})
         # self.assertIsNot(status, 1)

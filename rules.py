@@ -30,8 +30,13 @@ class In2Code_Rule():
     def updateState(self, state):
         self.state = state
     def activate(self):
-        eval("exec('from datetime import datetime')")
-        return eval(self.code), self.state
+        result = None
+        if isinstance(self.code, list):
+            for c in self.code:
+                result = eval(c)
+        else:
+            result = eval(self.code)
+        return result, self.state
     def isTrue(self, message):
         if message == self.input:
             return True

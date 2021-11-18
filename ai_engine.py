@@ -1,6 +1,6 @@
  #!/usr/bin/env python3
 
-from rules_engine import RulesEngine
+from rs_engine import RulesEngine
 from rules import *
 from padatious import IntentContainer
 
@@ -33,6 +33,8 @@ class AI:
         self.container.load_file('hello', 'intents/hello.intent')
         self.container.load_file('goodbye', 'intents/goodbye.intent')
         self.container.load_file('cursing', 'intents/cursing.intent')
+        self.container.load_file('time', 'intents/time.intent')
+        self.container.load_file('thank u', 'intents/thanks.intent')
         self.container.train()
 
     def get_isTesting(self):
@@ -56,7 +58,7 @@ class AI:
                     break
         if r is None:
             data = self.container.calc_intent(msg)
-            r = self.findRule(data.name) if data.conf > 0.7 else None
+            r = self.findRule(data.name) if data.conf > 0.6 else None
         return r
 
     def query(self, msg, state):

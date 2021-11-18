@@ -7,5 +7,6 @@ thank u => You welcome, master.
 cursing => Oh, master..
 hello => hey!
 time => {
-    datetime.now().strftime('Today %Y-%m-%d. Time is  %H:%M:%S')
+    exec('from datetime import datetime')
+    datetime.now().strftime('%H:%M:%S')
 }
