@@ -1,4 +1,6 @@
  #!/usr/bin/env python3
+import sys, os
+sys.path.insert(0, os.path.abspath('..'))
 
 import unittest
 import ai_engine

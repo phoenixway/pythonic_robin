@@ -16,14 +16,17 @@ class AI:
         self.initIntents()
 
     def initIntents(self):
-        self.intent_recognizer = IntentContainer('intent_cache')
-        self.intent_recognizer.load_file('hello', 'intents/hello.intent')
-        self.intent_recognizer.load_file('goodbye', 'intents/goodbye.intent')
-        self.intent_recognizer.load_file('cursing', 'intents/cursing.intent')
-        self.intent_recognizer.load_file('time', 'intents/time.intent')
-        self.intent_recognizer.load_file('thank u', 'intents/thanks.intent')
-        self.intent_recognizer.load_file('inspire', 'intents/inspire.intent')
-        self.intent_recognizer.train()
+        try:
+            self.intent_recognizer = IntentContainer('intent_cache')
+            self.intent_recognizer.load_file('hello', THIS_DIR / 'intents/hello.intent')
+            self.intent_recognizer.load_file('goodbye', THIS_DIR / 'intents/goodbye.intent')
+            self.intent_recognizer.load_file('cursing', THIS_DIR / 'intents/cursing.intent')
+            self.intent_recognizer.load_file('time', THIS_DIR / 'intents/time.intent')
+            self.intent_recognizer.load_file('thank u', THIS_DIR / 'intents/thanks.intent')
+            self.intent_recognizer.load_file('inspire', THIS_DIR / 'intents/inspire.intent')
+            self.intent_recognizer.train()
+        except Exception:
+            print('Intents error.')
 
     def quitStatus(state):
         state['status']='quit'
