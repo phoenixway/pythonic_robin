@@ -1,8 +1,12 @@
  #!/usr/bin/env python3
 import ai_engine
-import os
+import os, sys
 import readline
 import atexit
+from termcolor import colored
+from pathlib import Path
+
+sys.path.insert(0, os.path.dirname(__file__))
 
 histfile = os.path.join(os.path.expanduser("~"), ".rs_history")
 h_len = 0
@@ -27,7 +31,10 @@ state['status'] = 'default'
 user_message = ""
 ai = ai_engine.AI()
 ai.isTesting = True
-ai.rulesEngine.loadFromFile("script1.rules")
+THIS_DIR = Path(__file__).parent
+ai.rulesEngine.loadFromFile(THIS_DIR / "scripts/general.rules")
+ai.rulesEngine.loadFromFile(THIS_DIR / "scripts/tools_script.rules")
+
 
 while True:
     answer, state = ai.query(user_message, state)
@@ -35,6 +42,6 @@ while True:
         print(answer)  
     if state['status'] == 'quit':
         break
-    user_message = input(">>")
+    user_message = input(colored(">> ", 'blue', attrs=['bold']))
 print("Exiting..")
 

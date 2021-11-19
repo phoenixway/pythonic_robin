@@ -271,8 +271,4 @@ class TestGrammar(unittest.TestCase):
         parseTree = self.rules_engine.rs_parser.parseString(test_data)
         item = parseTree[0]
         self.assertTrue('in2jscode' in item)
-        self.assertEqual(item['in2jscode'][0], "js_func")
-        s = ""
-        for i in item['jscode']:
-            s = s + i + " "
-        self.assertEqual(s, "var x = {company: 'Sqreen'}; x.company ")
+ 

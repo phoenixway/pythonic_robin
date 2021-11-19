@@ -1,0 +1,6 @@
+testScript >>> answer
+#comment it
+js_func >>> jscode 
+    var x = {company: 'Sqreen'}; 
+    x.company
+end_jscode

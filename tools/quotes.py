@@ -3,7 +3,7 @@ import random, os
 
 def getQuote():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    print(current_dir)
+    #print(current_dir)
     filename = current_dir+"/"+'quotes.txt'
     with open(filename) as file:
         lines = file.readlines()

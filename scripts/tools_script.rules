@@ -1,0 +1,22 @@
+
+time >>> {
+    exec('from datetime import datetime')
+    datetime.now().strftime('%H:%M:%S')
+}
+change wallpaper >>> {
+    exec('import os')
+    os.popen('variety -n').read()
+}
+
+#exec('import os')
+#os.popen('xdg-open "https://www.pinterest.com/wheniwork/motivation-for-today/"').read()
+inspire >>> {
+    exec('from tools.quotes import getQuote')
+    getQuote()
+}
+
+weather >>> {
+    exec('from tools.weather import get_weather')
+    get_weather()
+}
+

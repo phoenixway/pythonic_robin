@@ -1,4 +1,4 @@
 /docs/**
 *.pyc
-__pythcache/**
+__pythcache__/**
 intent_cache

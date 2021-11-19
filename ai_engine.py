@@ -4,6 +4,7 @@ from rs_engine import RulesEngine
 from rules import *
 from padatious import IntentContainer
 from tools.quotes import getQuote
+from pathlib import Path
 
 class AI:
     
@@ -46,6 +47,10 @@ class AI:
         self._testingMode = value
         if value:
             self.rulesEngine.rules = [*self.rulesEngine.rules, *AI.testRules]
+            THIS_DIR = Path(__file__).parent
+            f = THIS_DIR / "scripts/test_script.rules"
+            self.rulesEngine.loadFromFile(f)
+
         else:
             self.rulesEngine.rules = {item for item in self.rulesEngine.rules if item not in AI.testRules}
 

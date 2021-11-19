@@ -1,0 +1,9 @@
+hello >>> jscode
+    greatings = ['hey you!', 'hello, great warrior!', 'sholom, eternal champion!', 'good time of day, master', 'great to see you, mylord'] ;
+    i = Math.floor(Math.random() * 5) ;
+    greatings[i]
+end_jscode
+
+cheer me >>> Congratulations, greatest developper in the world ever!
+thank u >>> You welcome, master.
+cursing >>> Oh, master..
