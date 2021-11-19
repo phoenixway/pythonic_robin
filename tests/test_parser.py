@@ -3,7 +3,7 @@
 import unittest
 from rs_engine import RulesEngine
 
-class TestGrammar(unittest.TestCase):
+class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
     def setUp(self) -> None:
         self.rules_engine = RulesEngine()
         return super().setUp()

@@ -6,55 +6,49 @@ from padatious import IntentContainer
 from tools.quotes import getQuote
 from pathlib import Path
 
+THIS_DIR = Path(__file__).parent
+
 class AI:
     
+    def __init__(self) -> None:
+        self.rulesEngine = RulesEngine()
+        self._testingMode = False
+        self.initIntents()
+
+    def initIntents(self):
+        self.intent_recognizer = IntentContainer('intent_cache')
+        self.intent_recognizer.load_file('hello', 'intents/hello.intent')
+        self.intent_recognizer.load_file('goodbye', 'intents/goodbye.intent')
+        self.intent_recognizer.load_file('cursing', 'intents/cursing.intent')
+        self.intent_recognizer.load_file('time', 'intents/time.intent')
+        self.intent_recognizer.load_file('thank u', 'intents/thanks.intent')
+        self.intent_recognizer.load_file('inspire', 'intents/inspire.intent')
+        self.intent_recognizer.train()
+
     def quitStatus(state):
         state['status']='quit'
         return state
 
     testRules = [
-        
         In2Code_Rule("functest", "str(1+1)"),
         In2Out_Rule("test_testMode", "ok!"),
         In2OutAndState_Rule("goodbye", "Have a nice day!", state_change=quitStatus ),
         In2Out_Rule("", "Welcome!\n" + getQuote())
-        # ,
-        # {
-        #     "trigger_type": "mark and user_input", 
-        #     "response_type": "ai_answer", 
-        #     "mark": "testmark",
-        #     "input": "whatsup", 
-        #     "output": "generating answers for u"
-        # }
-        ]
+    ]
 
-    def __init__(self) -> None:
-        self.rulesEngine = RulesEngine()
-        self._testingMode = False
-        self.container = IntentContainer('intent_cache')
-        self.container.load_file('hello', 'intents/hello.intent')
-        self.container.load_file('goodbye', 'intents/goodbye.intent')
-        self.container.load_file('cursing', 'intents/cursing.intent')
-        self.container.load_file('time', 'intents/time.intent')
-        self.container.load_file('thank u', 'intents/thanks.intent')
-        self.container.load_file('inspire', 'intents/inspire.intent')
-        self.container.train()
-
-    def get_isTesting(self):
+    def getIsTesting(self):
         return self._testingMode
 
-    def set_isTesting(self, value):
+    def setIsTesting(self, value):
         self._testingMode = value
         if value:
             self.rulesEngine.rules = [*self.rulesEngine.rules, *AI.testRules]
-            THIS_DIR = Path(__file__).parent
-            f = THIS_DIR / "scripts/test_script.rules"
-            self.rulesEngine.loadFromFile(f)
+            self.rulesEngine.loadFromFile(THIS_DIR / "scripts/test_script.rules")
 
         else:
             self.rulesEngine.rules = {item for item in self.rulesEngine.rules if item not in AI.testRules}
 
-    isTesting = property(get_isTesting, set_isTesting)
+    isTesting = property(getIsTesting, setIsTesting)
 
     def findRule(self, msg, state={}):
         r = None
@@ -64,22 +58,14 @@ class AI:
                     r = rule
                     break
         if r is None:
-            data = self.container.calc_intent(msg)
+            data = self.intent_recognizer.calc_intent(msg)
             r = self.findRule(data.name) if data.conf > 0.5 else None
         return r
 
     def query(self, msg, state):
         answer = "Don't know what to say." 
-
         rule = self.findRule(msg)
         if rule != None:
             rule.updateState(state)
             answer, state = rule.activate()
-            # elif rule.get("trigger_type", None) == "user_input" and rule["input"] == msg:
-            #     if rule.get("response_type", None) == "output":
-            #         answer = rule["output"]
-            #     elif rule.get("response_type", None) == "func":
-            #         answer = rule["func"]()
-            #     break
-
         return answer, state
