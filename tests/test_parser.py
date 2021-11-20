@@ -90,27 +90,111 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2out'][1], 'b6')
         pass
 
+    def test_brackets_zeroblock(self):
+        test_data = '''
+        text1 { }
+        '''
+        parseTree =self.rules_engine.rs_parser.parseString(test_data)
+        self.assertEqual(len(parseTree), 1)
+        item = parseTree[0]
+        # self.assertTrue('in2out' in item)
+
+        # self.assertEqual(item['in2out'][0], 'bla')
+        # self.assertEqual(item['in2out'][1], 'bla2')
+        # item = parseTree[2]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], 'b5')
+        # self.assertEqual(item['in2out'][1], 'b6')
+        pass
     def test_brackets_block(self):
         test_data = '''
-        text1
-        text2 { 
-            text3 text4 
-                {
-                    text5
-                    text6 text7
-                }
+        text1 { 
+               text2
         }
         '''
         parseTree =self.rules_engine.rs_parser.parseString(test_data)
-        self.assertEqual(len(parseTree), 3)
+        self.assertEqual(len(parseTree), 1)
         item = parseTree[0]
-        self.assertTrue('in2out' in item)
-        self.assertEqual(item['in2out'][0], 'bla')
-        self.assertEqual(item['in2out'][1], 'bla2')
-        item = parseTree[2]
-        self.assertTrue('in2out' in item)
-        self.assertEqual(item['in2out'][0], 'b5')
-        self.assertEqual(item['in2out'][1], 'b6')
+        # self.assertTrue('in2out' in item)
+
+        # self.assertEqual(item['in2out'][0], 'bla')
+        # self.assertEqual(item['in2out'][1], 'bla2')
+        # item = parseTree[2]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], 'b5')
+        # self.assertEqual(item['in2out'][1], 'b6')
+        pass
+
+    def test_brackets_block1(self):
+        test_data = '''
+        text1 { 
+               text2 {
+                   text3
+               }
+        }
+        '''
+        parseTree =self.rules_engine.rs_parser.parseString(test_data)
+        self.assertEqual(len(parseTree), 1)
+        item = parseTree[0]
+        # self.assertTrue('in2out' in item)
+
+        # self.assertEqual(item['in2out'][0], 'bla')
+        # self.assertEqual(item['in2out'][1], 'bla2')
+        # item = parseTree[2]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], 'b5')
+        # self.assertEqual(item['in2out'][1], 'b6')
+        pass
+
+    def test_brackets_recursive(self):
+        test_data = '''
+        text1 { 
+               text2 {
+                   text3
+                   text4
+                   text5 {
+                       text6
+                       text7
+                   }
+               }
+        }
+        '''
+        parseTree =self.rules_engine.rs_parser.parseString(test_data)
+        self.assertEqual(len(parseTree), 1)
+        # item = parseTree[0]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], 'bla')
+        # self.assertEqual(item['in2out'][1], 'bla2')
+        # item = parseTree[2]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], 'b5')
+        # self.assertEqual(item['in2out'][1], 'b6')
+        pass
+
+    def test_brackets_in2out(self):
+        test_data = '''
+        text0 >>> out0
+        text1 >>> out1 { 
+               text2 >>> out2 {
+                   text3 >>> out3
+                   text4 >>> out4
+                   text5 >>> out5 {
+                       text6 >>> out6
+                       text7 >>> out7
+                   }
+               }
+        }
+        '''
+        parseTree =self.rules_engine.rs_parser.parseString(test_data)
+        self.assertEqual(len(parseTree), 2)
+        # item = parseTree[0]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], 'bla')
+        # self.assertEqual(item['in2out'][1], 'bla2')
+        # item = parseTree[2]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], 'b5')
+        # self.assertEqual(item['in2out'][1], 'b6')
         pass
 
     def test_code_python(self):
