@@ -9,7 +9,6 @@ def getParser():
     
     NL = Suppress(LineEnd())
     nonspaces=alphanums + "._,:=;%!?#+-()\'\"/"
-    # nonspacesjs=alphanums + "._,:#=*{}[]!;%!?+-()\'\"/"
     text = Word(alphanums + " ")
     input = text('input')
     input.setParseAction(lambda t: t[0].rstrip(' '))
@@ -17,6 +16,5 @@ def getParser():
     comment = pythonStyleComment ('comment')
     istack = [1]
     NESTED_PARENTHESES = nestedExpr('{', '}') ('mark')
-    bblock = Suppress(Keyword('{')) + OneOrMore(statement) + Suppress(Keyword('}'))
     statement << (Group( text('true text') | NESTED_PARENTHESES ))('statement')
     return OneOrMore(statement)
