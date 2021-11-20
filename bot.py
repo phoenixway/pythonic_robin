@@ -38,7 +38,7 @@ ai.rulesEngine.loadFromFile(THIS_DIR / "scripts/tools_script.rules")
 
 while True:
     answer, state = ai.query(user_message, state)
-    if answer != "":
+    if answer != "" and answer != None:
         print(answer)  
     if state['status'] == 'quit':
         break

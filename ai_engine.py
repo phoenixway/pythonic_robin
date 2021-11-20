@@ -17,14 +17,15 @@ class AI:
 
     def initIntents(self):
         try:
-            self.intent_recognizer = IntentContainer('intent_cache')
-            self.intent_recognizer.load_file('hello', THIS_DIR / 'intents/hello.intent')
-            self.intent_recognizer.load_file('goodbye', THIS_DIR / 'intents/goodbye.intent')
-            self.intent_recognizer.load_file('cursing', THIS_DIR / 'intents/cursing.intent')
-            self.intent_recognizer.load_file('time', THIS_DIR / 'intents/time.intent')
-            self.intent_recognizer.load_file('thank u', THIS_DIR / 'intents/thanks.intent')
-            self.intent_recognizer.load_file('inspire', THIS_DIR / 'intents/inspire.intent')
-            self.intent_recognizer.train()
+            r = IntentContainer('intent_cache')
+            r.load_file('hello', THIS_DIR / 'intents/hello.intent')
+            r.load_file('goodbye', THIS_DIR / 'intents/goodbye.intent')
+            r.load_file('cursing', THIS_DIR / 'intents/cursing.intent')
+            r.load_file('time', THIS_DIR / 'intents/time.intent')
+            r.load_file('thank u', THIS_DIR / 'intents/thanks.intent')
+            r.load_file('inspire', THIS_DIR / 'intents/inspire.intent')
+            r.train()
+            self.intent_recognizer = r
         except Exception:
             print('Intents error.')
 

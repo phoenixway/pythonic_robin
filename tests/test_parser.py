@@ -1,5 +1,6 @@
  #!/usr/bin/env python3
 
+from pprint import pprint
 import unittest
 from rs_engine import RulesEngine
 
@@ -56,9 +57,51 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2out'][1], "bla4 text 2")
         item = parseTree[2]
         self.assertTrue('comment' in item)
-        self.assertEqual(item['comment'][0], "comment it")
+        self.assertEqual(item['comment'][0], "#")
 
-    def test_code1(self):
+    def test_indent_block(self):
+        test_data = '''
+            bla>>>bla2
+            bla3 text >>> bla4 text 2
+                b5 >>> b6
+                    b7 >>> b8
+        '''
+        parseTree =self.rules_engine.rs_parser.parseString(test_data)
+        self.assertEqual(len(parseTree), 4)
+        item = parseTree[0]
+        self.assertTrue('in2out' in item)
+        self.assertEqual(item['in2out'][0], 'bla')
+        self.assertEqual(item['in2out'][1], 'bla2')
+        item = parseTree[2]
+        self.assertTrue('in2out' in item)
+        self.assertEqual(item['in2out'][0], 'b5')
+        self.assertEqual(item['in2out'][1], 'b6')
+        pass
+
+    def test_brackets_block(self):
+        test_data = '''
+        text1
+        text2 { 
+            text3 text4 
+                {
+                    text5
+                    text6 text7
+                }
+        }
+        '''
+        parseTree =self.rules_engine.rs_parser.parseString(test_data)
+        self.assertEqual(len(parseTree), 3)
+        item = parseTree[0]
+        self.assertTrue('in2out' in item)
+        self.assertEqual(item['in2out'][0], 'bla')
+        self.assertEqual(item['in2out'][1], 'bla2')
+        item = parseTree[2]
+        self.assertTrue('in2out' in item)
+        self.assertEqual(item['in2out'][0], 'b5')
+        self.assertEqual(item['in2out'][1], 'b6')
+        pass
+
+    def test_code_python(self):
         test_data = '''
         bla>>>bla2
         bla3 text >>> bla4 text 2
@@ -74,7 +117,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         #FIXME
         self.assertEqual(item['in2code'][0], "func")
 
-    def test_code2(self):
+    def test_code_python2(self):
         test_data = '''
         bla>>>bla2
         bla3 text >>> bla4 text 2
@@ -90,7 +133,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['code'][0], "code5('test')")
         self.assertEqual(item['in2code'][0], "func")
 
-    def test_code3(self):
+    def test_code_python3(self):
         test_data = '''
         bla>>>bla2
         bla3 text >>> bla4 text 2
@@ -104,7 +147,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['code'][0], "code5('test')")
         self.assertEqual(item['in2code'][0], "func")
 
-    def test_code4(self):
+    def test_code_python4(self):
         test_data = '''
         bla>>>bla2
         bla3 text >>> bla4 text 2
@@ -118,7 +161,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['code'][0], "code5('test') ")
         self.assertEqual(item['in2code'][0], "func")
 
-    def test_code5(self):
+    def test_code_python5(self):
         test_data = '''
         bla>>>bla2
         bla3 text >>> bla4 text 2
@@ -133,7 +176,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['code'][0], "code5('test')")
         self.assertEqual(item['in2code'][0], "func")
 
-    def test_code6(self):
+    def test_code_python6(self):
         test_data = '''
         bla>>>bla2
         bla3 text >>> bla4 text 2
@@ -157,7 +200,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2jscode'][0], "inpt")
         self.assertEqual(item['in2jscode'][1], "fuck")
 
-    def test_code7_1(self):
+    def test_code_js_1(self):
         test_data = '''
         inpt >>> jscode fuck shit end_jscode
         inpt1 >>> jscode fuck1 shit1 end_jscode
@@ -208,7 +251,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2jscode'][0], "inpt1")
         self.assertEqual(item['in2jscode'][1], "fuck1")
 
-    def test_code7_3(self):
+    def test_code_js_3(self):
         test_data = '''inpt >>> jscode fuck shit end_jscode'''
         parseTree = self.rules_engine.rs_parser.parseString(test_data)
         item = parseTree[0]
@@ -217,7 +260,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2jscode'][1], "fuck")
 
 
-    def test_code8(self):
+    def test_code_js2(self):
         test_data = '''
         inpt >>> jscode 
         fuck 
@@ -230,7 +273,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2jscode'][0], "inpt")
         self.assertEqual(item['in2jscode'][1], "fuck")
 
-    def test_code9(self):
+    def test_code_js4(self):
         test_data = '''
         inpt >>> jscode 
             fuck fuck2
@@ -243,7 +286,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2jscode'][0], "inpt")
         self.assertEqual(item['in2jscode'][1], "fuck")
 
-    def test_code10(self):
+    def test_code_js5(self):
         test_data = '''
         js_func >>> jscode 
             var x = {company: 'Sqreen'}; 
@@ -260,7 +303,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
             s = s + i + " "
         self.assertEqual(s, "var x = {company: 'Sqreen'}; x.company; x.company ")
 
-    def test_code11(self):
+    def test_code_js6(self):
         test_data = '''
         hello >>> jscode
             greatings = ['hey!', 'hello, great warrior!', 'sholom, eternal champion!'] ;
