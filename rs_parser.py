@@ -14,7 +14,6 @@ def getParser():
     input.setParseAction(lambda t: t[0].rstrip(' '))
     output = text('output')
     comment = pythonStyleComment ('comment')
-    istack = [1]
     NESTED_PARENTHESES = nestedExpr('{', '}') ('mark')
     statement << (Group( text('true text') | NESTED_PARENTHESES ))('statement')
     return OneOrMore(statement)
