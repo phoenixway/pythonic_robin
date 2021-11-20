@@ -19,6 +19,18 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.assertEqual(item['in2out'][0], "bla")
         self.assertEqual(item['in2out'][1], "bla2")
 
+    def test_notFollowedBy(self):
+        test_data = '''
+        text2
+        bla>>>bla2
+        text1
+        '''
+        parseTree = self.rules_engine.rs_parser.parseString(test_data)
+        # item = parseTree[0]
+        # self.assertTrue('in2out' in item)
+        # self.assertEqual(item['in2out'][0], "bla")
+        # self.assertEqual(item['in2out'][1], "bla2")
+
     def test_in2out1(self):
         test_data = '''
         bla >>> bla2
