@@ -13,8 +13,9 @@ def getParser():
     PYCODE = Suppress(Keyword('pycode'))
     END_PYCODE = Suppress(Keyword('end_pycode'))
     
-    text = Word(alphanums + " " + "_")
-
+    NL = Suppress(LineEnd())
+    nonspaces=alphanums + "._,:=;%!?#+-()\'\"/"
+    text = Word(alphanums + " ")
     input = text('input')
     input.setParseAction(lambda t: t[0].rstrip(' '))
     output = text('output')
