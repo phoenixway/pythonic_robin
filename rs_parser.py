@@ -12,8 +12,7 @@ def getParser():
     END_JSCODE = Suppress(Keyword('end_jscode'))    
     PYCODE = Suppress(Keyword('pycode'))
     END_PYCODE = Suppress(Keyword('end_pycode'))
-    
-    NL = Suppress(LineEnd())
+
     nonspaces=alphanums + "._,:=;%!?#+-()\'\"/"
     text = Word(alphanums + " ")
     input = text('input')
