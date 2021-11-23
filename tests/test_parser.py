@@ -3,7 +3,6 @@
 from pprint import pprint
 import unittest
 from rs_engine import RulesEngine
-from termcolor import colored
 import rules as rl
 
 class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
@@ -208,45 +207,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         print('End of painting.')
         pass
 
-    def get_rules(self, res):
-        compound = False
-        rules = []
-        if ('inner_block' in res) :
-            compound = True
-            
-        for n, item in enumerate(res):
-            if compound:
-                if n == 0:
-                    r = rl.In2Nested_Rule(item[0], item[1])
-                    rule = {}
-                    rule['type'] = 'compound'
-                    rule['first']='In: "{}", out: "{}"'.format(item[0], item[1])
-                    rule['inners']=[]
-                    r.nested = []
-                    continue
-                else:
-                    r.nested.append(self.get_rules(item))
-                    rule['inners'].append(self.get_rules(item))
-                    rules = r
-                    continue
-            elif ('inner_block' in item):
-                rules.append(self.get_rules(item))
-            else:
-                r = rl.In2Out_Rule()
-                rule = {}
-                rule['type'] = 'solo'
-                if isinstance(item, str):
-                    r.input = res[0]
-                    r.output = res[1]
-                    rule['text']= 'In: "{}", out: "{}"'.format(res[0], res[1])
-                    rules = r
-                    break
-                else:
-                    r.input = item[0]
-                    r.output = item[1]
-                    rule['text']= 'In: "{}", out: "{}"'.format(item[0], item[1])
-                    rules.append(r)
-        return rules
+    
 
     def test_brackets_simple_in2out(self):
         test_data = '''
@@ -264,7 +225,7 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         #self.assertEqual(len(parseTree), 3)
         #self.assertTrue('inner_block' in parseTree[2])
         self.paint_result(parseTree)
-        pprint(self.get_rules(parseTree))
+        pprint(self.rules_engine.get_rules(parseTree))
         pass
 
     def test_brackets_in2out(self):
