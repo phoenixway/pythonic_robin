@@ -4,9 +4,12 @@ from pprint import pprint
 import unittest
 from rs_engine import RulesEngine
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 from termcolor import colored
 >>>>>>> 46d6a03 (wip on nested rules)
+=======
+>>>>>>> 5aa639f (wip)
 import rules as rl
 
 class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
@@ -231,7 +234,6 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         self.paint_result(parseTree)
         for i in self.rules_engine.get_rules(parseTree):
             pprint(i)        
-        pass
 
     def test_brackets_in2out(self):
         test_data = '''
