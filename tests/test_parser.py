@@ -3,6 +3,10 @@
 from pprint import pprint
 import unittest
 from rs_engine import RulesEngine
+<<<<<<< HEAD
+=======
+from termcolor import colored
+>>>>>>> 46d6a03 (wip on nested rules)
 import rules as rl
 
 class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
