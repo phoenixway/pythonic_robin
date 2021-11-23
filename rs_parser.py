@@ -21,10 +21,10 @@ def getParser():
     in2out = (input + LEAD + output) ("in2out")
 
     comment = pythonStyleComment ('comment')
-    
+        
     statement = (Group( comment | just_text | in2out) ).set_results_name('statement', True) 
     
-    compound_statement = Forward()
+    compound_statement = Forward()('compound_statement')
     inner_block = LBRAC + Optional(NL) + ZeroOrMore(compound_statement | statement) + Optional(NL) + RBRAC
     compound_statement << Group(statement + Optional(NL) + (inner_block('inner_block')))
     compound_statement.set_results_name('compound_statement', True) 
