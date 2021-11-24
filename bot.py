@@ -33,7 +33,7 @@ ai = ai_engine.AI()
 ai.isTesting = True
 THIS_DIR = Path(__file__).parent
 ai.rulesEngine.loadFromFile(THIS_DIR / "scripts/general.rules")
-ai.rulesEngine.loadFromFile(THIS_DIR / "scripts/tools_script.rules")
+#ai.rulesEngine.loadFromFile(THIS_DIR / "scripts/tools_script.rules")
 
 
 while True:

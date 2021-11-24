@@ -4,29 +4,37 @@ from pyparsing import *
 import pyparsing as pp
 
 def getParser():
-    ParserElement.setDefaultWhitespaceChars(" \t")
-    statement = Forward()
-    suite = pp.IndentedBlock(statement)
-    NL = Suppress(LineEnd())
-    nonspaces=alphanums + "._,:=;%!?#+-()\'\"/"
-    nonspacesjs=alphanums + "._,:#=*{}[]!;%!?+-()\'\"/"
-    text = Combine(delimitedList(Word(nonspaces), delim=r' '), joinString=' ')
+    NL=Suppress(LineEnd())
+    ONL = Optional(NL)
+    LEAD=Suppress(">>>")
+    LBRAC, RBRAC = map(Suppress, '{}')
+    JSCODE = Suppress(Keyword('jscode'))
+    END_JSCODE = Suppress(Keyword('end_jscode'))    
+    PYCODE = Suppress(Keyword('pycode'))
+    END_PYCODE = Suppress(Keyword('end_pycode'))
+    
+    text = Word(alphanums + " " + "_")
+
     input = text('input')
     output = text('output')
-    in2out = (input + Suppress(Optional(Word(" "))) + Suppress(">>>") + ~FollowedBy("jscode") + output + NL) ("in2out")
-    comment = (Suppress("#") + Word(nonspaces + " ") + NL)("comment")
+    output.setParseAction(lambda t: t[0].rstrip(' '))
+  
+    in2out = (input + LEAD + ~(JSCODE) + output) ("in2out")
 
-    code = OneOrMore(Optional(NL) + Word(nonspaces + " ") + Optional(NL))('code')
+    nonspaces=alphanums + "._,:#=*{}[]!;%!?+-()\'\"/"
+    code = ZeroOrMore(Word(nonspaces), stop_on="end_jscode")('jscode')
+    code.setParseAction(lambda t: ' '.join(t))
 
-    in2code = (input + Suppress(">>>") + Optional(NL) + Suppress('{') + code + Optional(NL) + Suppress('}') + NL) ("in2code")
+    in2jscode = (input + LEAD + ONL + JSCODE + code + END_JSCODE)("in2jscode")
     
+    in2pycode = (input + LEAD + ONL + PYCODE + code + END_PYCODE)("in2pycode")
+
+    comment = pythonStyleComment ('comment')
+        
+    statement = (Group( comment | in2out | in2jscode | in2pycode ) ).set_results_name('statement', True) 
     
-    txt = OneOrMore(Word(nonspacesjs), stop_on="end_jscode")
-    jscode = (Optional(NL) + txt + Optional(OneOrMore(NL + txt, stop_on="end_jscode")) + Optional(NL))('jscode')
-
-    in2jscode = (input + Suppress(">>> jscode") + jscode + Suppress(Keyword("end_jscode")))("in2jscode")
-
-
-    statement << Optional(NL) + Group(in2out | comment | in2code | in2jscode | NL)('statement')
-    statement.setResultsName("statement")
-    return OneOrMore(statement)
+    compound_statement = Forward()('compound_statement')
+    inner_block = LBRAC + Optional(NL) + ZeroOrMore(compound_statement | statement) + Optional(NL) + RBRAC
+    compound_statement << Group(statement + Optional(NL) + (inner_block('inner_block')))
+    compound_statement.set_results_name('compound_statement', True) 
+    return OneOrMore(compound_statement | statement)

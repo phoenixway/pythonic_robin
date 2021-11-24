@@ -5,6 +5,7 @@ from rules import *
 from padatious import IntentContainer
 from tools.quotes import getQuote
 from pathlib import Path
+import pprint
 
 THIS_DIR = Path(__file__).parent
 
@@ -51,6 +52,7 @@ class AI:
 
         else:
             self.rulesEngine.rules = {item for item in self.rulesEngine.rules if item not in AI.testRules}
+        pass
 
     isTesting = property(getIsTesting, setIsTesting)
 
