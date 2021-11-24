@@ -34,20 +34,29 @@ class RulesEngine():
             elif ('inner_block' in item):
                 rules.append(self.get_rules(item))
             else:
+                if 'in2out' in item:
+                    input = item['in2out'][0]
+                    output = item['in2out'][1]
+                elif 'in2out' in res: 
+                    input = res[0]
+                    output = res[1]
                 r = rl.In2Out_Rule()
-                rule = {}
-                rule['type'] = 'solo'
+                r.input = input
+                r.output = output
                 if isinstance(item, str):
-                    r.input = res[0]
-                    r.output = res[1]
-                    rule['text']= 'In: "{}", out: "{}"'.format(res[0], res[1])
                     rules = r
                     break
                 else:
-                    r.input = item[0]
-                    r.output = item[1]
-                    rule['text']= 'In: "{}", out: "{}"'.format(item[0], item[1])
                     rules.append(r)
+                # if isinstance(item, str):
+                #     r.input = res[0]
+                #     r.output = res[1]
+                #     rules = r
+                #     break
+                # else:
+                #     r.input = item[0]
+                #     r.output = item[1]
+                #     rules.append(r)
         return rules
 
     def getRules(self, pyparserResults):

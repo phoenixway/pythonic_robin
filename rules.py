@@ -9,7 +9,7 @@ class In2Out_Rule():
         self.state_change = state_change
         #super().__init__(input, output)
     def __repr__(self):
-        return "<<In2out rule. In: '{}'. Out: '{}'.>>".format(self.input, self.output)
+        return "\nIn2out rule >> (\n\tin: '{}', \n\tout: '{}' \n)".format(self.input, self.output)
     def updateState(self, state):
         self.state = state
     def activate(self):
@@ -24,7 +24,7 @@ class In2Nested_Rule(In2Out_Rule):
         self.nested = None
         super().__init__(input, output)
     def __repr__(self):
-        return "<<In2nested rule. In: '{}'. Out: '{}'. Nested: '{}'.>>".format(self.input, self.output, self.nested)
+        return "\nIn2nested rule >> (\n\tin: '{}', \n\tout: '{}', \n\tnested: '{}' \n)".format(self.input, self.output, self.nested)
     def updateState(self, state):
         self.state = state
     def activate(self):

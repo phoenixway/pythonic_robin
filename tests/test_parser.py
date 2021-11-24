@@ -225,7 +225,8 @@ class TestParser_In2Out_In2Code_In2JSCode(unittest.TestCase):
         #self.assertEqual(len(parseTree), 3)
         #self.assertTrue('inner_block' in parseTree[2])
         self.paint_result(parseTree)
-        pprint(self.rules_engine.get_rules(parseTree))
+        for i in self.rules_engine.get_rules(parseTree):
+            pprint(i)        
         pass
 
     def test_brackets_in2out(self):
