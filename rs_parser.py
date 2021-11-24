@@ -30,6 +30,12 @@ def getParser():
     
     in2pycode = (input + LEAD + ONL + PYCODE + code + END_PYCODE)("in2pycode")
 
+    nonspacesjs=alphanums + "._,:#=*{}[]!;%!?+-()\'\"/"
+    txt = OneOrMore(Word(nonspacesjs), stop_on="end_jscode")
+    jscode = (Optional(NL) + txt + Optional(OneOrMore(NL + txt, stop_on="end_jscode")) + Optional(NL))('jscode')
+    in2jscode = (input + Suppress(">>> jscode") + jscode + Suppress(Keyword("end_jscode")))("in2jscode")
+
+
     comment = pythonStyleComment ('comment')
         
     statement = (Group( comment | in2out | in2jscode | in2pycode ) ).set_results_name('statement', True) 
