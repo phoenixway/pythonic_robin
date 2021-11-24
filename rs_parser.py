@@ -12,9 +12,9 @@ def getParser():
     END_JSCODE = Suppress(Keyword('end_jscode'))    
     PYCODE = Suppress(Keyword('pycode'))
     END_PYCODE = Suppress(Keyword('end_pycode'))
+    
+    text = Word(alphanums + " " + "_")
 
-    nonspaces=alphanums + "._,:=;%!?#+-()\'\"/"
-    text = Word(alphanums + " ")
     input = text('input')
     input.setParseAction(lambda t: t[0].rstrip(' '))
     output = text('output')
@@ -29,12 +29,6 @@ def getParser():
     in2jscode = (input + LEAD + ONL + JSCODE + code + END_JSCODE)("in2jscode")
     
     in2pycode = (input + LEAD + ONL + PYCODE + code + END_PYCODE)("in2pycode")
-
-    nonspacesjs=alphanums + "._,:#=*{}[]!;%!?+-()\'\"/"
-    txt = OneOrMore(Word(nonspacesjs), stop_on="end_jscode")
-    jscode = (Optional(NL) + txt + Optional(OneOrMore(NL + txt, stop_on="end_jscode")) + Optional(NL))('jscode')
-    in2jscode = (input + Suppress(">>> jscode") + jscode + Suppress(Keyword("end_jscode")))("in2jscode")
-
 
     comment = pythonStyleComment ('comment')
         
