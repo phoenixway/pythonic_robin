@@ -16,6 +16,7 @@ def getParser():
     text = Word(alphanums + " " + "_")
 
     input = text('input')
+    input.setParseAction(lambda t: t[0].rstrip(' '))
     output = text('output')
     output.setParseAction(lambda t: t[0].rstrip(' '))
   
