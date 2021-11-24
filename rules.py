@@ -42,7 +42,8 @@ class In2OutAndState_Rule(In2Out_Rule):
     def updateState(self, state):
         self.state = state
     def activate(self):
-        self.state = self.state_change(self.state)
+        if self.state_change is not None:
+            self.state = self.state_change(self.state)
         return self.output, self.state
 
 class In2Code_Rule():

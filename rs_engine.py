@@ -34,20 +34,28 @@ class RulesEngine():
             elif ('inner_block' in item):
                 rules.append(self.get_rules(item))
             else:
+                isIn2out = False
                 if 'in2out' in item:
                     input = item['in2out'][0]
                     output = item['in2out'][1]
+                    isIn2out=True
                 elif 'in2out' in res: 
+                    isIn2out=True
                     input = res[0]
                     output = res[1]
-                r = rl.In2Out_Rule()
-                r.input = input
-                r.output = output
-                if isinstance(item, str):
-                    rules = r
-                    break
+                if isIn2out:
+                    r = rl.In2Out_Rule()
+                    r.input = input
+                    r.output = output
+                    if isinstance(item, str):
+                        rules = r
+                        break
+                    else:
+                        rules.append(r)
                 else:
-                    rules.append(r)
+                    if 'comment' in item:
+                        continue
+                    
                 # if isinstance(item, str):
                 #     r.input = res[0]
                 #     r.output = res[1]
@@ -93,5 +101,5 @@ class RulesEngine():
         except Exception:
             print("Error script reading.")
         else:
-            self.rules.extend(self.getRules(self.rs_parser.parseString(script)))
+            self.rules.extend(self.get_rules(self.rs_parser.parseString(script)))
 
