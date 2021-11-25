@@ -37,8 +37,7 @@ class In2Nested_Rule(In2Out_Rule):
 
 class In2OutAndState_Rule(In2Out_Rule):
     def __init__(self, input=None, output=None, state={}, state_change=None) -> None:
-        self.state_change = state_change
-        super().__init__(input, output)
+        super().__init__(input, output, state_change = state_change)
     def updateState(self, state):
         self.state = state
     def activate(self):

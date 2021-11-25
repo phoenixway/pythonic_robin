@@ -55,16 +55,6 @@ class RulesEngine():
                 else:
                     if 'comment' in item:
                         continue
-                    
-                # if isinstance(item, str):
-                #     r.input = res[0]
-                #     r.output = res[1]
-                #     rules = r
-                #     break
-                # else:
-                #     r.input = item[0]
-                #     r.output = item[1]
-                #     rules.append(r)
         return rules
 
     def getRules(self, pyparserResults):

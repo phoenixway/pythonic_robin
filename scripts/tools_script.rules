@@ -1,22 +1,22 @@
 
-time >>> {
+time >>> pycode
     exec('from datetime import datetime')
     datetime.now().strftime('%H:%M:%S')
-}
-change wallpaper >>> {
+end_pycode
+change wallpaper >>> pycode
     exec('import os')
     os.popen('variety -n').read()
-}
+end_pycode
 
 #exec('import os')
 #os.popen('xdg-open "https://www.pinterest.com/wheniwork/motivation-for-today/"').read()
-inspire >>> {
+inspire >>> pycode
     exec('from tools.quotes import getQuote')
     getQuote()
-}
+end_pycode
 
-weather >>> {
+weather >>> pycode
     exec('from tools.weather import get_weather')
     get_weather()
-}
+end_pycode
 

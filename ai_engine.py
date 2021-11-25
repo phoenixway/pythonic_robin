@@ -56,16 +56,20 @@ class AI:
 
     isTesting = property(getIsTesting, setIsTesting)
 
-    def findRule(self, msg, state={}):
+    def isInRules(self, msg): 
         r = None
         for rule in self.rulesEngine.rules:
             if rule.isTrue(msg):
                 if isinstance(rule, In2Out_Rule) or isinstance(rule, In2Code_Rule) or isinstance(rule, In2JSCode_Rule):
                     r = rule
                     break
+        return r
+
+    def findRule(self, msg, state={}):
+        r = self.isInRules(msg)
         if r is None:
             data = self.intent_recognizer.calc_intent(msg)
-            r = self.findRule(data.name) if data.conf > 0.5 else None
+            r = self.isInRules(data.name) if data.conf > 0.5 else None
         return r
 
     def query(self, msg, state):
